@@ -1,0 +1,37 @@
+body {
+  font-family: system-ui, sans-serif;
+  background: #f6f3ea;
+  color: #222;
+  margin: 0;
+}
+main {
+  max-width: 36rem;
+  margin: 3rem auto;
+  padding: 0 1rem;
+}
+h1 small { font-weight: normal; color: #777; font-size: 0.6em; }
+label { display: block; font-weight: 600; margin-bottom: 0.25rem; }
+input[type="text"] {
+  font-size: 1.5rem;
+  padding: 0.5rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+.hint { color: #777; }
+.tiles { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 1.25rem 0; }
+.tile {
+  position: relative;
+  width: 2.75rem;
+  height: 2.75rem;
+  display: grid;
+  place-items: center;
+  background: #f1d9a7;
+  border: 1px solid #c9a96a;
+  border-radius: 4px;
+  font-size: 1.5rem;
+  font-weight: 700;
+  box-shadow: 0 2px 0 #b8955a;
+}
+.tile sub { position: absolute; right: 4px; bottom: 2px; font-size: 0.65rem; }
+.tile.high { background-color: #f3b7a0; }
+.score { font-size: 2rem; font-weight: 700; }

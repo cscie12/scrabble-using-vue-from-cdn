@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Scrabble Score — Vue (no build step)</title>
+  <link rel="stylesheet" href="styles/scrabble.css">
+  <!-- Vue straight from a CDN: no npm, no build. Just JavaScript. -->
+  <script src="https://unpkg.com/vue@3.5.45/dist/vue.global.js"></script>
+</head>
+<body>
+  <main id="app">
+    <h1>Scrabble Score <small>(Vue via CDN)</small></h1>
+
+    <label for="word">Word</label>
+    <!-- v-model: two-way binding between the input and the `word` ref -->
+    <input id="word" v-model="word" type="text" autocomplete="off" placeholder="Type a word">
+
+    <!-- v-if / v-else: Vue adds/removes these for us -->
+    <p v-if="letters.length === 0" class="hint">Enter a word to see its score.</p>
+
+    <template v-else>
+      <div class="tiles">
+        <!-- v-for: one tile per letter. :class binds an attribute to an expression -->
+        <span
+          v-for="(l, i) in letters"
+          :key="i"
+          class="tile"
+          :class="{ high: scrabbleValues[l] >= 8 }"
+        >{{ l }}<sub>{{ scrabbleValues[l] }}</sub></span>
+      </div>
+      <!-- {{ }}: output a value. `score` is a computed, so it is always current -->
+      <p class="score">Score: {{ score }}</p>
+    </template>
+
+    <!-- TRY IT: add a "double word score" checkbox.
+         1. const doubleWord = ref(false)
+         2. <input type="checkbox" v-model="doubleWord">
+         3. update the score computed: return doubleWord.value ? total * 2 : total
+    -->
+  </main>
+
+  <script>
+    const { createApp, ref, computed } = Vue;
+
+   const scrabbleValues = {
+        A: 1, B: 3, C: 3, D: 2,
+        E: 1, F: 4, G: 2, H: 4,
+        I: 1, J: 8, K: 5, L: 1,
+        M: 3, N: 1, O: 1, P: 3,
+        Q: 10, R: 1, S: 1, T: 1, 
+        U: 1, V: 4, W: 4, X: 8, 
+        Y: 4, Z: 10,
+      };
+
+    createApp({
+      setup() {
+        // STATE: a ref is a reactive "box". In JS you use .value; in the template you don't.
+        const word = ref('');
+
+        // DERIVED STATE: computed() re-runs automatically when word.value changes
+        const letters = computed(() =>
+          Array.from(word.value.toUpperCase().replace(/[^A-Z]/g, ''))
+        );
+
+        const score = computed(() =>
+          letters.value.reduce((sum, l) => sum + scrabbleValues[l], 0)
+        );
+
+        // Anything returned here is available in the template
+        return { word, letters, score, scrabbleValues };
+      }
+    }).mount('#app');
+
+    // Notice what's missing: no querySelector, no addEventListener,
+    // no innerHTML, no "hidden = true". We describe the UI; Vue keeps it in sync.
+  </script>
+</body>
+</html>
